@@ -1,0 +1,19 @@
+# Compiled class files
+*.class
+
+# IntelliJ IDEA project files
+*.iml
+.idea/
+
+# VS Code settings
+.vscode/
+
+# Build directory
+/out/
+bin/
+
+# MacOS
+.DS_Store
+
+# Java crash logs
+hs_err_pid*
