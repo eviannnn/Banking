@@ -3,49 +3,59 @@ package src;
 public class BankAccount {
     private double balance;
 
-    // Default constructor
     public BankAccount() {
-        this.balance = 0.0;
+        balance = 0.0;
     }
 
-    // Constructor with balance parameter
-    public BankAccount(double balance) {
-        this.balance = balance;
+    public BankAccount(double initialBalance) {
+        balance = initialBalance; // creates bank account with set initial balance
     }
 
-    // Method to deposit money
+    public double getBalance() {
+        return balance;
+    }
+
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            System.out.println("Deposited: " + amount);
-        } else {
-            System.out.println("Invalid deposit amount!");
+        if (amount <= 0) {
+            System.out.println("Deposit must be positive.");
+            return;
         }
+        balance += amount;
+        System.out.println("Added " + amount + " to account.");
     }
 
-    // Method to withdraw money
     public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-            System.out.println("Withdrew: " + amount);
-        } else {
-            System.out.println("Invalid or insufficient funds.");
+        if (amount <= 0) {
+            System.out.println("Withdrawal amount must be positive.");
+            return;
         }
+        if (amount > balance) {
+            System.out.println("Not enough money to withdraw " + amount);
+            return;
+        }
+        balance -= amount;
+        System.out.println("Withdrew " + amount);
     }
 
-    // Print current balance
-    public void printBalance() {
-        System.out.println("Current balance: " + balance);
+    public void showBalance() {
+        System.out.printf("Balance: %.2f\n", balance); // prints balance with two decimal places
     }
 
-    // Transfer to another BankAccount
-    public void transfer(BankAccount other, double amount) {
-        if (amount > 0 && amount <= balance) {
-            this.withdraw(amount);
-            other.deposit(amount);
-            System.out.println("Transferred " + amount + " to another account.");
-        } else {
-            System.out.println("Transfer failed. Check amount and balance.");
+    public void transferTo(BankAccount receiver, double amount) {
+        if (receiver == null) {
+            System.out.println("Target account does not exist.");
+            return;
         }
+        if (amount <= 0) {
+            System.out.println("Transfer amount must be positive.");
+            return;
+        }
+        if (amount > balance) {
+            System.out.println("Not enough money to transfer " + amount);
+            return;
+        }
+        this.withdraw(amount);
+        receiver.deposit(amount);
+        System.out.println("Transferred " + amount);
     }
 }

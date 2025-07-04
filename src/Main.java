@@ -1,50 +1,107 @@
 package src;
 
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
+
+
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        BankAccount account1 = new BankAccount();
-        BankAccount account2 = new BankAccount(100);
+        List<BankAccount> accounts = new ArrayList<>();
 
         while (true) {
-            System.out.println("\n--- Banking Menu ---");
-            System.out.println("1. Deposit");
-            System.out.println("2. Withdraw");
-            System.out.println("3. Print Balance");
-            System.out.println("4. Transfer to another account");
-            System.out.println("5. Exit");
-            System.out.print("Choose an option: ");
+            System.out.println("\nChoose an action: create / deposit / withdraw / transfer / balance / export / exit");
+            String command = scanner.nextLine().toLowerCase();
 
-            int choice = scanner.nextInt();
+            switch (command) {
+                case "create":
+                    System.out.print("Enter initial balance: ");
+                    double init = scanner.nextDouble();
+                    BankAccount acc = new BankAccount(init);
+                    accounts.add(acc);
+                    System.out.println("Account created. ID: " + (accounts.size() - 1));
+                    scanner.nextLine(); // consume newline
+                    break;
 
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter deposit amount: ");
-                    double depositAmount = scanner.nextDouble();
-                    account1.deposit(depositAmount);
+                case "deposit":
+                    System.out.print("Enter account ID: ");
+                    int depId = scanner.nextInt();
+                    if (isValid(depId, accounts)) {
+                        System.out.print("Enter amount to deposit: ");
+                        double dep = scanner.nextDouble();
+                        accounts.get(depId).deposit(dep);
+                    }
+                    scanner.nextLine();
                     break;
-                case 2:
-                    System.out.print("Enter withdrawal amount: ");
-                    double withdrawAmount = scanner.nextDouble();
-                    account1.withdraw(withdrawAmount);
+
+                case "withdraw":
+                    System.out.print("Enter account ID: ");
+                    int wdId = scanner.nextInt();
+                    if (isValid(wdId, accounts)) {
+                        System.out.print("Enter amount to withdraw: ");
+                        double wd = scanner.nextDouble();
+                        accounts.get(wdId).withdraw(wd);
+                    }
+                    scanner.nextLine();
                     break;
-                case 3:
-                    account1.printBalance();
+
+                case "transfer":
+                    System.out.print("Enter source account ID: ");
+                    int srcId = scanner.nextInt();
+                    System.out.print("Enter target account ID: ");
+                    int tgtId = scanner.nextInt();
+                    if (isValid(srcId, accounts) && isValid(tgtId, accounts)) {
+                        System.out.print("Enter amount to transfer: ");
+                        double amt = scanner.nextDouble();
+                        accounts.get(srcId).transferTo(accounts.get(tgtId), amt);
+                    }
+                    scanner.nextLine();
                     break;
-                case 4:
-                    System.out.print("Enter amount to transfer to account2: ");
-                    double transferAmount = scanner.nextDouble();
-                    account1.transfer(account2, transferAmount);
+
+                case "balance":
+                    System.out.print("Enter account ID: ");
+                    int bId = scanner.nextInt();
+                    if (isValid(bId, accounts)) {
+                        accounts.get(bId).showBalance();
+                    }
+                    scanner.nextLine();
                     break;
-                case 5:
-                    System.out.println("Thank you for using the banking system!");
-                    scanner.close();
+
+                case "export":
+                    exportAccounts(accounts);
+                    break;
+
+                case "exit":
+                    System.out.println("Goodbye!");
                     return;
+
                 default:
-                    System.out.println("Invalid choice!");
+                    System.out.println("Unknown command.");
             }
+        }
+    }
+
+    private static boolean isValid(int id, List<BankAccount> accounts) {
+        if (id >= 0 && id < accounts.size()) { // if account number is not negative and is less than
+                                                //quantity of created accounts
+            return true;
+        }
+        System.out.println("Invalid account ID.");
+        return false;
+    }
+
+    private static void exportAccounts(List<BankAccount> accounts) { // accounts - gets list accounts, which contatins all the bank accounts
+        try (PrintWriter writer = new PrintWriter("src/accounts.csv")) { // opens a flow for writing text into the file
+            // PrintWriter - class for writing text into the file
+            // try - automatic close of the file after filling it
+            writer.println("AccountID,Balance");
+            for (int i = 0; i < accounts.size(); i++) { // i - account number, accounts.get(i).getBalance() - gets the balance
+                writer.printf("%d,%.2f%n", i, accounts.get(i).getBalance());// %d - integer, %.2f - float or double
+            }
+            System.out.println("Accounts exported to accounts.csv");
+        } catch (Exception e) {
+            System.out.println("Error exporting: " + e.getMessage());
         }
     }
 }
