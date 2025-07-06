@@ -1,19 +1,31 @@
-# Compiled class files
-*.class
-
-# IntelliJ IDEA project files
-*.iml
+# --- IDEs / editors -------------------------------------------------
 .idea/
-
-# VS Code settings
+*.iml
 .vscode/
+.project
+.classpath
 
-# Build directory
+# --- Build systems --------------------------------------------------
+*.class
 /out/
-bin/
+/bin/
+/build/
+.gradle/
 
-# MacOS
-.DS_Store
+# --- Packaging artefacts -------------------------------------------
+*.jar
+*.war
 
-# Java crash logs
+# --- Generated application data ------------------------------------
+accounts.csv
+
+# --- Logs & test coverage ------------------------------------------
+*.log
+logs/
 hs_err_pid*
+jacoco.exec
+coverage/
+
+# --- OS files -------------------------------------------------------
+.DS_Store
+Thumbs.db

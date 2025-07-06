@@ -1,4 +1,4 @@
-package com.eva.bankapp;
+package src;
 
 public class BankAccount {
     private double balance;
