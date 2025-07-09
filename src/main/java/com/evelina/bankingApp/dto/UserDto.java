@@ -1,17 +1,10 @@
 package com.evelina.bankingApp.dto;
 
-public class RegistrationRequest {
+public class UserDto {
     private String username;
     private String password;
 
-    public RegistrationRequest() {
-    }
-
-    public RegistrationRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
+    // getters and setters
     public String getUsername() {
         return username;
     }
@@ -28,3 +21,4 @@ public class RegistrationRequest {
         this.password = password;
     }
 }
+
